@@ -1,0 +1,49 @@
+/* Fold image gallery — only what Tailwind utilities can't express: the
+   nested strips that make the paper fold, and the SplitText line masks. */
+
+/* Each strip hangs from the bottom edge of the one above it, so a crease
+   rotates everything below it, like real paper. */
+.fold-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% / var(--fold-count));
+  transform-origin: 50% 0%;
+  transform-style: preserve-3d;
+}
+.fold-strip .fold-strip {
+  top: 100%;
+  height: 100%;
+}
+
+/* 1px overlap hides hairline seams between creases */
+.fold-face {
+  position: absolute;
+  inset: 0 0 -1px;
+  overflow: hidden;
+}
+.fold-media > .fold-strip > .fold-face {
+  border-radius: var(--fold-radius) var(--fold-radius) 0 0;
+}
+.fold-strip:not(:has(.fold-strip)) > .fold-face {
+  inset: 0;
+  border-radius: 0 0 var(--fold-radius) var(--fold-radius);
+}
+
+/* every strip shows its own slice of the one picture */
+.fold-face-image {
+  position: absolute;
+  top: calc(-100% * var(--i));
+  left: 0;
+  width: 100%;
+  height: calc(100% * var(--fold-count));
+  max-width: none;
+  object-fit: cover;
+}
+
+/* SplitText masks: extra room so descenders are not clipped */
+.fold-line-mask {
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
